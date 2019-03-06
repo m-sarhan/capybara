@@ -22,8 +22,8 @@ module Capybara
 
         @selector = Selector.new(
           find_selector(args[0].is_a?(Symbol) ? args.shift : args[0]),
-          selector_config: { enable_aria_label: enable_aria_label, test_id: test_id },
-          selector_format: selector_format
+          config: { enable_aria_label: enable_aria_label, test_id: test_id },
+          format: selector_format
         )
 
         @locator = args.shift
@@ -150,7 +150,7 @@ module Capybara
     private
 
       def selector_format
-        @selector.selector_format
+        @selector.format
       end
 
       def text_fragments

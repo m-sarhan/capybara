@@ -195,32 +195,32 @@ module Capybara
 
     attr_reader :errors
 
-    def initialize(definition, selector_config:, selector_format:)
+    def initialize(definition, config:, format:)
       definition = self.class[definition] unless definition.is_a? Definition
       super(definition)
       @definition = definition
-      @selector_config = selector_config
-      @selector_format = selector_format
+      @config = config
+      @format = format
       @errors = []
     end
 
-    def selector_format
-      @selector_format || @definition.default_format
+    def format
+      @format || @definition.default_format
     end
 
     def enable_aria_label
-      @selector_config[:enable_aria_label]
+      @config[:enable_aria_label]
     end
 
     def test_id
-      @selector_config[:test_id]
+      @config[:test_id]
     end
 
     def call(locator, **options)
-      if selector_format
-        raise ArgumentError, "Selector #{@name} does not support #{selector_format}" unless expressions.key?(selector_format)
+      if format
+        raise ArgumentError, "Selector #{@name} does not support #{format}" unless expressions.key?(format)
 
-        instance_exec(locator, options, &expressions[selector_format])
+        instance_exec(locator, options, &expressions[format])
       else
         warn 'Selector has no format'
       end
@@ -232,8 +232,8 @@ module Capybara
       errors << error_msg
     end
 
-    def expression_for(name, locator, config: @selector_config, format: selector_format, **options)
-      Selector.new(name, selector_config: config, selector_format: format).call(locator, **options)
+    def expression_for(name, locator, config: @config, format: format, **options)
+      Selector.new(name, config: config, format: format).call(locator, **options)
     end
 
     # @api private
@@ -247,7 +247,7 @@ module Capybara
 
     # @api private
     def builder(expr = nil)
-      case selector_format
+      case format
       when :css
         Capybara::Selector::CSSBuilder
       when :xpath
