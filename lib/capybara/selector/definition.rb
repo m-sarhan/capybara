@@ -254,6 +254,12 @@ module Capybara
 
     private
 
+      def handled_custom_keys(filter, keys)
+        keys.select do |key|
+          filter.handles_option?(key) && !::Capybara::Queries::SelectorQuery::VALID_KEYS.include?(key)
+        end
+      end
+
       def parameter_names(block)
         block.parameters.select { |(type, _name)| %i[key keyreq].include? type }.map { |(_type, name)| name }
       end

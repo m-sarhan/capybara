@@ -305,12 +305,6 @@ module Capybara
     def find_by_class_attr(classes)
       Array(classes).map { |klass| XPath.attr(:class).contains_word(klass) }.reduce(:&)
     end
-
-    def handled_custom_keys(filter, keys)
-      keys.select do |key|
-        filter.handles_option?(key) && !::Capybara::Queries::SelectorQuery::VALID_KEYS.include?(key)
-      end
-    end
   end
 end
 
