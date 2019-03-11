@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Capybara do
+RSpec.describe Capybara, :focus_ do
   describe 'Selectors' do
     let :string do
       Capybara.string <<-STRING
@@ -143,25 +143,28 @@ RSpec.describe Capybara do
 
     describe 'xpath' do
       it 'uses filter names passed in' do
-        selector = Capybara::Selector.new :test do
+        selector = Capybara.add_selector :test do
           xpath(:something, :other) { |_locator| XPath.descendant }
         end
+        selector = Capybara::Selector.new :test, config: nil, format: nil
 
         expect(selector.expression_filters.keys).to include(:something, :other)
       end
 
       it 'gets filter names from block if none passed to xpath method' do
-        selector = Capybara::Selector.new :test do
+        Capybara.add_selector :test do
           xpath { |_locator, valid3:, valid4: nil| "#{valid3} #{valid4}" }
         end
+        selector = Capybara::Selector.new :test, config: nil, format: nil
 
         expect(selector.expression_filters.keys).to include(:valid3, :valid4)
       end
 
       it 'ignores block parameters if names passed in' do
-        selector = Capybara::Selector.new :test do
+        Capybara.add_selector :test do
           xpath(:valid1) { |_locator, valid3:, valid4: nil| "#{valid3} #{valid4}" }
         end
+        selector = Capybara::Selector.new :test, config: nil, format: nil
 
         expect(selector.expression_filters.keys).to include(:valid1)
         expect(selector.expression_filters.keys).not_to include(:valid3, :valid4)
@@ -181,25 +184,28 @@ RSpec.describe Capybara do
       end
 
       it 'uses filter names passed in' do
-        selector = Capybara::Selector.new :text do
+        Capybara.add_selector :test do
           css(:name, :other_name) { |_locator| '' }
         end
+        selector = Capybara::Selector.new :test, config: nil, format: nil
 
         expect(selector.expression_filters.keys).to include(:name, :other_name)
       end
 
       it 'gets filter names from block if none passed to css method' do
-        selector = Capybara::Selector.new :test do
+        Capybara.add_selector :test do
           css { |_locator, valid3:, valid4: nil| "#{valid3} #{valid4}" }
         end
+        selector = Capybara::Selector.new :test, config: nil, format: nil
 
         expect(selector.expression_filters.keys).to include(:valid3, :valid4)
       end
 
       it 'ignores block parameters if names passed in' do
-        selector = Capybara::Selector.new :test do
+        Capybara.add_selector :test do
           css(:valid1) { |_locator, valid3:, valid4: nil| "#{valid3} #{valid4}" }
         end
+        selector = Capybara::Selector.new :test, config: nil, format: nil
 
         expect(selector.expression_filters.keys).to include(:valid1)
         expect(selector.expression_filters.keys).not_to include(:valid3, :valid4)
