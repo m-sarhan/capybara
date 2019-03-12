@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Capybara, :focus_ do
+RSpec.describe Capybara do
   describe 'Selectors' do
     let :string do
       Capybara.string <<-STRING
